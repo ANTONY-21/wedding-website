@@ -3119,8 +3119,8 @@ function MorePage({ setPage }) {
           <p className="section-sub" style={{ marginBottom: 24 }}>Everything you might want to know</p>
           <div style={{ maxWidth: 700, margin: "0 auto" }}>
             {[
-              { q: "What time should I arrive?", a: "Please arrive 30 minutes before the ceremony at 4:00 PM. Seating begins at 3:30 PM at St. Michael's Cathedral." },
-              { q: "Is there parking available?", a: "Yes, there is ample valet parking at both the cathedral and the reception venue. Look for our gold-and-white signs to guide you." },
+              { q: "What time should I arrive?", a: "Please arrive by 9:00 AM — the Holy Nuptial Mass begins at 9:30 AM at Our Lady of Presentation Church, Neyveli Township. Seating begins at 9:00 AM, and the reception luncheon follows from 12:00 PM to 2:00 PM at Thirumana Mandapam, Community Hall Block 24." },
+              { q: "Is there parking available?", a: "Yes, parking is available at both Our Lady of Presentation Church and the Thirumana Mandapam reception hall in Neyveli Township. Volunteers will help direct you on the day." },
               { q: "Are children welcome?", a: "We love your little ones! Children are welcome at the ceremony. There will be a quiet kids' corner at the reception with light entertainment." },
               { q: "Will the ceremony be live-streamed?", a: "Yes! For our family and friends who can't make it, we'll be streaming the ceremony live. The link will be shared via email closer to the date." },
               { q: "Can I bring a plus-one?", a: "Plus-ones are listed on your invitation. If you'd like to bring an additional guest, please reach out to us directly so we can accommodate." },
