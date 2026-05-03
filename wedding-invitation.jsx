@@ -2092,9 +2092,8 @@ function GalleryPage() {
 
 // ─── RSVP HELPERS ───────────────────────────────────────────────────────────
 const RSVP_EVENTS = [
-  { id: "mehendi",   label: "Prayer & Mehendi",   date: "June 20 · 5 PM", venue: "Family Home Chapel, Adyar" },
-  { id: "ceremony",  label: "Wedding Ceremony",   date: "June 21 · 4 PM", venue: "St. Michael's Cathedral", required: true },
-  { id: "reception", label: "Wedding Reception",  date: "June 21 · 7 PM", venue: "Grand Ballroom, Taj Coromandel" },
+  { id: "ceremony",  label: "Holy Nuptial Mass",   date: "Sun · 21 Jun · 9:30 AM",       venue: "Our Lady of Presentation Church, Neyveli Township", required: true },
+  { id: "reception", label: "Wedding Reception",   date: "Sun · 21 Jun · 12:00 – 2:00 PM", venue: "Thirumana Mandapam, Block 24, Neyveli Township" },
 ];
 
 const COUNTRY_CODES = [
@@ -2129,7 +2128,7 @@ function emptyRSVP() {
   return {
     name: "", email: "", phone: "", countryCode: "+91",
     attending: "",
-    events: ["ceremony"],
+    events: ["ceremony", "reception"],
     guests: 1,
     guestList: [],
     needsHotel: false, needsShuttle: false,
@@ -2709,11 +2708,11 @@ function RSVPPage() {
                     <div className="grid-2" style={{ marginBottom: 16 }}>
                       <div className="form-group">
                         <label className="form-label" htmlFor="r-arrive">Arrival Date</label>
-                        <input id="r-arrive" type="date" className="form-input" value={form.arrivalDate} onChange={e => update({ arrivalDate: e.target.value })} min="2026-06-19" max="2026-06-22" />
+                        <input id="r-arrive" type="date" className="form-input" value={form.arrivalDate} onChange={e => update({ arrivalDate: e.target.value })} min="2026-06-19" max="2026-06-21" />
                       </div>
                       <div className="form-group">
                         <label className="form-label" htmlFor="r-depart">Departure Date</label>
-                        <input id="r-depart" type="date" className="form-input" value={form.departureDate} onChange={e => update({ departureDate: e.target.value })} min="2026-06-21" max="2026-06-25" />
+                        <input id="r-depart" type="date" className="form-input" value={form.departureDate} onChange={e => update({ departureDate: e.target.value })} min="2026-06-21" max="2026-06-23" />
                       </div>
                     </div>
                   )}
