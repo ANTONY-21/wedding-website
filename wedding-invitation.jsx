@@ -2226,13 +2226,48 @@ function emptyRSVP() {
 
 function formatDateTime(isoString) {
   if (!isoString) return "";
+  // Split combined "DATE|TIME" format from dropdown selections
+  if (isoString.includes("|")) {
+    const [dateStr, timeStr] = isoString.split("|");
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return isoString;
+    const dateLabel = d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" });
+    return `${dateLabel} · ${timeStr}`;
+  }
   const d = new Date(isoString);
   if (isNaN(d.getTime())) return isoString;
-  // If only date (no T), show as date
   if (!isoString.includes("T")) {
     return d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
   }
   return d.toLocaleString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit", hour12: true });
+}
+
+const ARRIVAL_DATES = [
+  { v: "2026-06-19", label: "Friday · 19 June 2026" },
+  { v: "2026-06-20", label: "Saturday · 20 June 2026" },
+  { v: "2026-06-21", label: "Sunday · 21 June 2026 (Wedding Day)" },
+];
+const DEPARTURE_DATES = [
+  { v: "2026-06-21", label: "Sunday · 21 June 2026 (Wedding Day)" },
+  { v: "2026-06-22", label: "Monday · 22 June 2026" },
+  { v: "2026-06-23", label: "Tuesday · 23 June 2026" },
+];
+const TIME_SLOTS = [
+  { v: "Early Morning (6 – 9 AM)", label: "🌅  Early Morning  (6 – 9 AM)" },
+  { v: "Morning (9 AM – 12 PM)",   label: "☀️  Morning  (9 AM – 12 PM)" },
+  { v: "Noon (12 – 3 PM)",         label: "🌞  Noon  (12 – 3 PM)" },
+  { v: "Afternoon (3 – 6 PM)",     label: "🌇  Afternoon  (3 – 6 PM)" },
+  { v: "Evening (6 – 9 PM)",       label: "🌆  Evening  (6 – 9 PM)" },
+  { v: "Night (after 9 PM)",       label: "🌙  Night  (after 9 PM)" },
+];
+
+function splitDateTime(combined) {
+  if (!combined || !combined.includes("|")) return ["", ""];
+  return combined.split("|");
+}
+function joinDateTime(date, time) {
+  if (!date && !time) return "";
+  return `${date || ""}|${time || ""}`;
 }
 
 // ─── STEP INDICATOR ─────────────────────────────────────────────────────────
@@ -3022,14 +3057,47 @@ function RSVPPage() {
                         <label className="form-label" htmlFor="r-from">📍 Travelling From</label>
                         <input id="r-from" className="form-input" placeholder="City you're coming from (e.g. Bangalore)" value={form.arrivalCity} onChange={e => update({ arrivalCity: e.target.value })} maxLength={80} />
                       </div>
-                      <div className="grid-2" style={{ marginBottom: 16 }}>
-                        <div className="form-group">
-                          <label className="form-label" htmlFor="r-arrive">Arrival Date & Time</label>
-                          <input id="r-arrive" type="datetime-local" className="form-input" value={form.arrivalDate} onChange={e => update({ arrivalDate: e.target.value })} min="2026-06-19T00:00" max="2026-06-21T23:59" />
+                      <div style={{ marginBottom: 16 }}>
+                        <p className="form-label" style={{ marginBottom: 10 }}>📅  Arrival</p>
+                        <div className="grid-2">
+                          <div className="form-group">
+                            <select id="r-arrive-date" className="form-select" aria-label="Arrival date"
+                              value={splitDateTime(form.arrivalDate)[0]}
+                              onChange={e => update({ arrivalDate: joinDateTime(e.target.value, splitDateTime(form.arrivalDate)[1]) })}>
+                              <option value="">— Select date —</option>
+                              {ARRIVAL_DATES.map(d => <option key={d.v} value={d.v}>{d.label}</option>)}
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <select id="r-arrive-time" className="form-select" aria-label="Arrival time"
+                              value={splitDateTime(form.arrivalDate)[1]}
+                              onChange={e => update({ arrivalDate: joinDateTime(splitDateTime(form.arrivalDate)[0], e.target.value) })}>
+                              <option value="">— Select time —</option>
+                              {TIME_SLOTS.map(t => <option key={t.v} value={t.v}>{t.label}</option>)}
+                            </select>
+                          </div>
                         </div>
-                        <div className="form-group">
-                          <label className="form-label" htmlFor="r-depart">Departure Date & Time</label>
-                          <input id="r-depart" type="datetime-local" className="form-input" value={form.departureDate} onChange={e => update({ departureDate: e.target.value })} min="2026-06-21T00:00" max="2026-06-23T23:59" />
+                      </div>
+
+                      <div style={{ marginBottom: 16 }}>
+                        <p className="form-label" style={{ marginBottom: 10 }}>📅  Departure</p>
+                        <div className="grid-2">
+                          <div className="form-group">
+                            <select id="r-depart-date" className="form-select" aria-label="Departure date"
+                              value={splitDateTime(form.departureDate)[0]}
+                              onChange={e => update({ departureDate: joinDateTime(e.target.value, splitDateTime(form.departureDate)[1]) })}>
+                              <option value="">— Select date —</option>
+                              {DEPARTURE_DATES.map(d => <option key={d.v} value={d.v}>{d.label}</option>)}
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <select id="r-depart-time" className="form-select" aria-label="Departure time"
+                              value={splitDateTime(form.departureDate)[1]}
+                              onChange={e => update({ departureDate: joinDateTime(splitDateTime(form.departureDate)[0], e.target.value) })}>
+                              <option value="">— Select time —</option>
+                              {TIME_SLOTS.map(t => <option key={t.v} value={t.v}>{t.label}</option>)}
+                            </select>
+                          </div>
                         </div>
                       </div>
                       <div className="form-group">
