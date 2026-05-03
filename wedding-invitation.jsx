@@ -2124,9 +2124,27 @@ function genReservationCode() {
 
 function emptyGuest() { return { name: "", ageGroup: "adult", diet: "", allergies: "" }; }
 
+const RELATIONSHIPS = [
+  { v: "",                   label: "— Please select —" },
+  { v: "family-bride",       label: "👰  Family of the Bride" },
+  { v: "family-groom",       label: "🤵  Family of the Groom" },
+  { v: "friend-bride",       label: "💝  Friend of the Bride" },
+  { v: "friend-groom",       label: "💙  Friend of the Groom" },
+  { v: "friend-both",        label: "💞  Friend of Both" },
+  { v: "colleague-bride",    label: "💼  Colleague of the Bride" },
+  { v: "colleague-groom",    label: "💼  Colleague of the Groom" },
+  { v: "neighbor",           label: "🏡  Neighbor / Community" },
+  { v: "other",              label: "✦  Other" },
+];
+
+function relationshipLabel(v) {
+  return (RELATIONSHIPS.find(r => r.v === v) || RELATIONSHIPS[0]).label;
+}
+
 function emptyRSVP() {
   return {
     name: "", email: "", phone: "", countryCode: "+91",
+    relationship: "",
     attending: "",
     events: ["ceremony", "reception"],
     guests: 1,
@@ -2355,6 +2373,7 @@ function RSVPPage() {
       if (!form.name.trim()) e.name = "Please enter your name";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Please enter a valid email";
       if (form.phone && !/^[0-9 ()-]{6,15}$/.test(form.phone)) e.phone = "Please enter a valid phone number";
+      if (!form.relationship) e.relationship = "Please tell us how you know us";
     } else if (step === 1) {
       if (!form.attending) e.attending = "Please tell us if you'll be joining";
     } else if (step === 2 && form.attending === "yes") {
@@ -2467,6 +2486,12 @@ function RSVPPage() {
                       <p style={{ marginTop: 4 }}>21 Jun 2026</p>
                     </div>
                   </div>
+                  {form.relationship && (
+                    <div style={{ marginTop: 14 }}>
+                      <p style={{ fontSize: 10, color: "#C9A96E", letterSpacing: 1.5, fontFamily: "Cinzel, serif" }}>RELATIONSHIP</p>
+                      <p style={{ marginTop: 4, fontSize: 13 }}>{relationshipLabel(form.relationship)}</p>
+                    </div>
+                  )}
                   <div style={{ marginTop: 14 }}>
                     <p style={{ fontSize: 10, color: "#C9A96E", letterSpacing: 1.5, fontFamily: "Cinzel, serif" }}>EVENTS ATTENDING</p>
                     <p style={{ marginTop: 4, fontSize: 13 }}>
@@ -2584,6 +2609,17 @@ function RSVPPage() {
                   <input id="r-phone" className="form-input" type="tel" placeholder="98765 43210" value={form.phone} onChange={e => update({ phone: e.target.value })} />
                 </div>
                 {errors.phone && <p role="alert" style={{ color: "#C4847A", fontSize: 12, marginTop: 4 }}>{errors.phone}</p>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="r-relationship">How do you know us? *</label>
+                <select id="r-relationship" className="form-select" value={form.relationship} onChange={e => update({ relationship: e.target.value })}>
+                  {RELATIONSHIPS.map(r => <option key={r.v} value={r.v}>{r.label}</option>)}
+                </select>
+                <p style={{ fontSize: 11, color: "rgba(61,43,31,0.5)", marginTop: 6, fontFamily: "Cormorant Garamond, serif", fontStyle: "italic" }}>
+                  Helps us with seating and a personal welcome
+                </p>
+                {errors.relationship && <p role="alert" style={{ color: "#C4847A", fontSize: 12, marginTop: 4 }}>{errors.relationship}</p>}
               </div>
 
               {/* Lookup existing */}
@@ -2744,6 +2780,7 @@ function RSVPPage() {
                 <ReviewRow label="Name" value={form.name} onEdit={() => setStep(0)} />
                 <ReviewRow label="Email" value={form.email} onEdit={() => setStep(0)} />
                 {form.phone && <ReviewRow label="Phone" value={`${form.countryCode} ${form.phone}`} onEdit={() => setStep(0)} />}
+                {form.relationship && <ReviewRow label="Relationship" value={relationshipLabel(form.relationship)} onEdit={() => setStep(0)} />}
                 <ReviewRow label="Attending" value={form.attending === "yes" ? "✓ Joyfully accepting" : "Sadly declining"} onEdit={() => setStep(1)} />
                 {form.attending === "yes" && (
                   <>
