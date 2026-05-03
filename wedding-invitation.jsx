@@ -1663,7 +1663,7 @@ function FAQItem({ q, a }) {
 
 const COUPLE = {
   groom: "Antony Paul",
-  bride: "Maria Loraine Lydia",
+  bride: "Dr. Maria Loraine Lydia",
   groomFull: "Mr. S.A. Antony Paul, B.Tech",
   groomBio: "Senior Associate, Cyber Security & AI, Cognizant (CTS), Chennai",
   brideFull: "Dr. Maria Loraine Lydia, MBBS, MS (Ophthalmology)",
@@ -1679,8 +1679,8 @@ const COUPLE = {
   hashtag: "#AntonyMariaForever",
   initials: "A ✦ M",
   rsvpDeadline: "May 21, 2026",
-  receptionVenue: "Thirumana Mandapam, Neyveli Township, Block 24",
-  receptionAddress: "Thirumana Mandapam, Block 24, Neyveli Township, Neyveli, Tamil Nadu",
+  receptionVenue: "Thirumana Mandapam, Community Hall Block 24, Neyveli Township",
+  receptionAddress: "Thirumana Mandapam, Community Hall Block 24, Neyveli Township, Neyveli, Tamil Nadu",
   brideParents: { father: "Mr. B. Arokianathan David", mother: "Mrs. A. Anna Shantha Mary" },
   groomParents: { father: "Mr. S. Arokyadoss", mother: "Mrs. G. Savariamma" },
   contacts: [
@@ -1795,7 +1795,7 @@ function HomePage({ setPage }) {
           <div className="grid-3">
             {[
               { icon: "⛪", title: "Holy Mass", sub: "Our Lady of Presentation Church, Neyveli Township", time: "9:30 AM" },
-              { icon: "🎊", title: "Reception", sub: "Thirumana Mandapam, Block 24, Neyveli", time: "12:00 PM – 2:00 PM" },
+              { icon: "🎊", title: "Reception", sub: "Thirumana Mandapam, Community Hall Block 24, Neyveli", time: "12:00 PM – 2:00 PM" },
               { icon: "🙏", title: "Blessing", sub: "Solemnized by 6 priests", time: "Sunday, 21 June 2026" },
             ].map((c) => (
               <div key={c.title} className="card-light" style={{ textAlign: "center", animationDelay: "0.1s" }}>
@@ -1927,14 +1927,14 @@ function EventsPage() {
       emoji: "⛪", title: "Holy Nuptial Mass",
       date: "Sunday, June 21, 2026", time: "9:30 AM – 11:00 AM",
       venue: "Our Lady of Presentation Church, Neyveli Township",
-      desc: "A sacred Catholic wedding ceremony solemnized by Rev. Fr. Albert Thambidurai with five concelebrating priests, celebrating the holy union of Antony Paul and Maria Loraine Lydia before God and loved ones.",
+      desc: "A sacred Catholic wedding ceremony solemnized by Rev. Fr. Albert Thambidurai with five concelebrating priests, celebrating the holy union of Antony Paul and Dr. Maria Loraine Lydia before God and loved ones.",
       color: "#EF9A9A"
     },
     {
       cls: "event-card-3",
       emoji: "🎊", title: "Wedding Reception",
       date: "Sunday, June 21, 2026", time: "12:00 PM – 2:00 PM",
-      venue: "Thirumana Mandapam, Block 24, Neyveli Township",
+      venue: "Thirumana Mandapam, Community Hall Block 24, Neyveli Township",
       desc: "A joyful celebration luncheon with family and friends — a heartfelt welcome with food, music, and blessings to mark the beginning of our forever.",
       color: "#A5D6A7"
     },
@@ -2093,7 +2093,7 @@ function GalleryPage() {
 // ─── RSVP HELPERS ───────────────────────────────────────────────────────────
 const RSVP_EVENTS = [
   { id: "ceremony",  label: "Holy Nuptial Mass",   date: "Sun · 21 Jun · 9:30 AM",       venue: "Our Lady of Presentation Church, Neyveli Township", required: true },
-  { id: "reception", label: "Wedding Reception",   date: "Sun · 21 Jun · 12:00 – 2:00 PM", venue: "Thirumana Mandapam, Block 24, Neyveli Township" },
+  { id: "reception", label: "Wedding Reception",   date: "Sun · 21 Jun · 12:00 – 2:00 PM", venue: "Thirumana Mandapam, Community Hall Block 24, Neyveli Township" },
 ];
 
 const COUNTRY_CODES = [
@@ -2905,7 +2905,7 @@ function MorePage({ setPage }) {
                 </div>
                 <p style={{ marginTop: 14, fontFamily: "Cinzel, serif", fontSize: 13, letterSpacing: 2, color: "#3D2B1F" }}>🎊 RECEPTION</p>
                 <p style={{ marginTop: 4, fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14 }}>
-                  Thirumana Mandapam, Block 24
+                  Thirumana Mandapam, Community Hall Block 24
                 </p>
                 <p style={{ fontSize: 12, color: "#8B6914", marginTop: 2 }}>Sunday · 12:00 PM – 2:00 PM</p>
               </div>
