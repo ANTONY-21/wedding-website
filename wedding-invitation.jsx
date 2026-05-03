@@ -772,7 +772,7 @@ const FontLoader = () => (
 
     /* ── SCRATCH CARD ── */
     .scratch-wrapper {
-      position: relative; width: 300px; height: 160px; margin: 0 auto;
+      position: relative; width: 320px; height: 240px; margin: 0 auto;
       border-radius: 16px; overflow: hidden;
       box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
@@ -782,8 +782,8 @@ const FontLoader = () => (
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 22px; color: white; font-style: italic;
-      line-height: 1.4; text-align: center; padding: 20px;
+      color: white;
+      line-height: 1.5; text-align: center; padding: 22px 24px;
     }
     .scratch-progress-bar {
       height: 4px; border-radius: 2px;
@@ -1411,7 +1411,7 @@ function Envelope({ message }) {
 }
 
 // ─── SCRATCH CARD ─────────────────────────────────────────────────────────────
-function ScratchCard({ revealText }) {
+function ScratchCard({ revealText, revealContent }) {
   const canvasRef = useRef(null);
   const [pct, setPct] = useState(0);
   const [done, setDone] = useState(false);
@@ -1460,11 +1460,15 @@ function ScratchCard({ revealText }) {
     <div style={{ textAlign: "center" }}>
       <div className="scratch-wrapper">
         <div className="scratch-reveal">
-          <span style={{ fontSize: 28, marginBottom: 8 }}>💍</span>
-          <span>{revealText}</span>
+          {revealContent ? revealContent : (
+            <>
+              <span style={{ fontSize: 28, marginBottom: 8 }}>💍</span>
+              <span style={{ fontSize: 22, fontStyle: "italic" }}>{revealText}</span>
+            </>
+          )}
         </div>
         <canvas
-          ref={canvasRef} width={300} height={160}
+          ref={canvasRef} width={320} height={240}
           className="scratch-canvas"
           style={{ position: "absolute", inset: 0, borderRadius: 16, opacity: done ? 0 : 1, transition: "opacity 0.5s" }}
           onMouseDown={() => drawing.current = true}
@@ -1820,8 +1824,25 @@ function HomePage({ setPage }) {
               <Envelope message="You are invited to witness the miracle of two souls becoming one. Come celebrate with us as we begin this blessed journey together in love and faith." />
             </div>
             <div>
-              <p style={{ color: "rgba(232,213,163,0.6)", fontFamily: "Lato", marginBottom: 24 }}>Scratch to reveal your gift</p>
-              <ScratchCard revealText={"You're Invited to the\nWedding of the Year! 💍\nTable #1 Reserved for You"} />
+              <p style={{ color: "rgba(232,213,163,0.6)", fontFamily: "Lato", marginBottom: 24 }}>Scratch for a blessing from us</p>
+              <ScratchCard revealContent={
+                <>
+                  <span style={{ fontSize: 22, marginBottom: 6, opacity: 0.85 }}>✦</span>
+                  <span style={{ fontSize: 17, fontStyle: "italic", lineHeight: 1.4, marginBottom: 4 }}>
+                    "He hath made everything<br/>beautiful in its time."
+                  </span>
+                  <span style={{ fontSize: 11, letterSpacing: 2, fontFamily: "Cinzel, serif", opacity: 0.85, marginBottom: 12 }}>
+                    ECCLESIASTES 3:11
+                  </span>
+                  <span style={{ width: 40, height: 1, background: "rgba(255,255,255,0.4)", margin: "4px 0 12px" }} />
+                  <span style={{ fontSize: 15, fontStyle: "italic", lineHeight: 1.4, marginBottom: 8 }}>
+                    Thank you for being part<br/>of our forever ✦
+                  </span>
+                  <span style={{ fontSize: 11, letterSpacing: 2, fontFamily: "Cinzel, serif", opacity: 0.9 }}>
+                    — ANTONY & MARIA
+                  </span>
+                </>
+              } />
             </div>
           </div>
         </div>
