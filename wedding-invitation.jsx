@@ -2811,9 +2811,6 @@ function RSVPPage() {
                   </div>
                 </div>
 
-                <p style={{ marginTop: 16, color: "#6B5040", fontSize: 13 }}>
-                  A confirmation has been sent to <strong>{form.email}</strong>
-                </p>
 
                 <div style={{ marginTop: 16, padding: 14, background: "rgba(201,169,110,0.1)", borderRadius: 10, fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914" }}>
                   <strong style={{ color: "#3D2B1F", fontFamily: "Cinzel, serif", fontStyle: "normal", fontSize: 14, letterSpacing: 1 }}>{totalAttending}</strong>
