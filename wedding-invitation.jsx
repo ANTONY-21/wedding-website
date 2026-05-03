@@ -1735,8 +1735,10 @@ async function sendRSVPToBackend(rsvp) {
     guestList: rsvp.guestList || [],
     needsHotel: !!rsvp.needsHotel,
     needsShuttle: !!rsvp.needsShuttle,
+    arrivalCity: rsvp.arrivalCity || "",
     arrivalDate: rsvp.arrivalDate || "",
     departureDate: rsvp.departureDate || "",
+    flightDetails: rsvp.flightDetails || "",
     songRequest: rsvp.songRequest || "",
     message: rsvp.message || "",
     specialRequests: rsvp.specialRequests || "",
@@ -2213,11 +2215,24 @@ function emptyRSVP() {
     guests: 1,
     guestList: [],
     needsHotel: false, needsShuttle: false,
+    arrivalCity: "",
     arrivalDate: "", departureDate: "",
+    flightDetails: "",
     songRequest: "", message: "", specialRequests: "",
     reservationCode: "",
     ts: 0,
   };
+}
+
+function formatDateTime(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return isoString;
+  // If only date (no T), show as date
+  if (!isoString.includes("T")) {
+    return d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+  }
+  return d.toLocaleString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit", hour12: true });
 }
 
 // ─── STEP INDICATOR ─────────────────────────────────────────────────────────
@@ -3002,16 +3017,26 @@ function RSVPPage() {
                   </div>
 
                   {(form.needsHotel || form.needsShuttle) && (
-                    <div className="grid-2" style={{ marginBottom: 16 }}>
+                    <>
                       <div className="form-group">
-                        <label className="form-label" htmlFor="r-arrive">Arrival Date</label>
-                        <input id="r-arrive" type="date" className="form-input" value={form.arrivalDate} onChange={e => update({ arrivalDate: e.target.value })} min="2026-06-19" max="2026-06-21" />
+                        <label className="form-label" htmlFor="r-from">📍 Travelling From</label>
+                        <input id="r-from" className="form-input" placeholder="City you're coming from (e.g. Bangalore)" value={form.arrivalCity} onChange={e => update({ arrivalCity: e.target.value })} maxLength={80} />
+                      </div>
+                      <div className="grid-2" style={{ marginBottom: 16 }}>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="r-arrive">Arrival Date & Time</label>
+                          <input id="r-arrive" type="datetime-local" className="form-input" value={form.arrivalDate} onChange={e => update({ arrivalDate: e.target.value })} min="2026-06-19T00:00" max="2026-06-21T23:59" />
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="r-depart">Departure Date & Time</label>
+                          <input id="r-depart" type="datetime-local" className="form-input" value={form.departureDate} onChange={e => update({ departureDate: e.target.value })} min="2026-06-21T00:00" max="2026-06-23T23:59" />
+                        </div>
                       </div>
                       <div className="form-group">
-                        <label className="form-label" htmlFor="r-depart">Departure Date</label>
-                        <input id="r-depart" type="date" className="form-input" value={form.departureDate} onChange={e => update({ departureDate: e.target.value })} min="2026-06-21" max="2026-06-23" />
+                        <label className="form-label" htmlFor="r-flight">🚌 Bus / Train Details (optional)</label>
+                        <input id="r-flight" className="form-input" placeholder="e.g. KSRTC bus from Chennai · arriving 14:30" value={form.flightDetails} onChange={e => update({ flightDetails: e.target.value })} maxLength={120} />
                       </div>
-                    </div>
+                    </>
                   )}
 
                   <div className="form-group">
@@ -3056,9 +3081,15 @@ function RSVPPage() {
                     )}
                     {form.songRequest && <ReviewRow label="Song" value={form.songRequest} onEdit={() => setStep(3)} />}
                     {(form.needsHotel || form.needsShuttle) && (
-                      <ReviewRow label="Travel"
-                        value={[form.needsHotel && "Hotel", form.needsShuttle && "Shuttle"].filter(Boolean).join(" + ")}
-                        onEdit={() => setStep(3)} />
+                      <>
+                        <ReviewRow label="Travel"
+                          value={[form.needsHotel && "🏨 Hotel needed", form.needsShuttle && "🚐 Shuttle needed"].filter(Boolean).join(" · ")}
+                          onEdit={() => setStep(3)} />
+                        {form.arrivalCity && <ReviewRow label="Travelling From" value={form.arrivalCity} onEdit={() => setStep(3)} />}
+                        {form.arrivalDate && <ReviewRow label="Arrival" value={formatDateTime(form.arrivalDate)} onEdit={() => setStep(3)} />}
+                        {form.departureDate && <ReviewRow label="Departure" value={formatDateTime(form.departureDate)} onEdit={() => setStep(3)} />}
+                        {form.flightDetails && <ReviewRow label="Bus / Train" value={form.flightDetails} onEdit={() => setStep(3)} />}
+                      </>
                     )}
                     {form.specialRequests && <ReviewRow label="Special" value={form.specialRequests} onEdit={() => setStep(3)} />}
                   </>
