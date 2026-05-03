@@ -2253,121 +2253,314 @@ function StepIndicator({ steps, current, onJump }) {
 }
 
 // ─── CONFIRMATION TICKET (downloadable PNG) ─────────────────────────────────
-function downloadTicket(rsvp) {
-  const W = 1080, H = 1500;
+function loadImageCORS(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("img load failed"));
+    img.src = src;
+  });
+}
+
+async function downloadTicket(rsvp) {
+  const W = 1080, H = 1700;
   const canvas = document.createElement("canvas");
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext("2d");
 
-  ctx.fillStyle = "#FDF8F0";
+  // Pre-load real QR
+  const qrData = `https://antony-21.github.io/wedding-website/#/rsvp?code=${encodeURIComponent(rsvp.reservationCode)}`;
+  let qrImg = null;
+  try {
+    qrImg = await loadImageCORS(`https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=8&format=png&data=${encodeURIComponent(qrData)}`);
+  } catch {}
+
+  // Days countdown
+  const daysToGo = Math.max(0, Math.ceil((new Date(COUPLE.date).getTime() - Date.now()) / 86400000));
+  const countdownText = daysToGo === 0 ? "Today's the day! 💒"
+    : daysToGo === 1 ? "Just 1 day to go! ✦"
+    : `${daysToGo} days to go ✦`;
+
+  // === BACKGROUND (cream paper gradient) ===
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, "#FDF8F0");
+  bg.addColorStop(1, "#F4E6C7");
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
+  // Paper grain
+  ctx.fillStyle = "rgba(139,105,20,0.025)";
+  for (let i = 0; i < 1800; i++) ctx.fillRect(Math.random()*W, Math.random()*H, 1, 1);
+
+  // === WATERMARK ===
+  ctx.save();
+  ctx.fillStyle = "rgba(201,169,110,0.06)";
+  ctx.font = "italic 600 320px 'Cormorant Garamond', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("A & M", W/2, H/2);
+  ctx.restore();
+  ctx.textBaseline = "alphabetic";
+
+  // === TOP DARK BAND ===
   ctx.fillStyle = "#1A1209";
-  ctx.fillRect(0, 0, W, 220);
+  ctx.fillRect(0, 0, W, 240);
+  // gold gradient strip
+  const strip = ctx.createLinearGradient(0, 0, W, 0);
+  strip.addColorStop(0, "#8B6914");
+  strip.addColorStop(0.5, "#E8D5A3");
+  strip.addColorStop(1, "#8B6914");
+  ctx.fillStyle = strip;
+  ctx.fillRect(0, 240, W, 4);
 
   ctx.fillStyle = "#C9A96E";
   ctx.font = "italic 28px 'Cormorant Garamond', Georgia, serif";
   ctx.textAlign = "center";
-  ctx.fillText("❖  ADMIT ONE  ❖", W / 2, 80);
+  ctx.fillText("❖  ADMIT ONE  ❖", W/2, 80);
   ctx.font = "600 60px 'Cinzel', Georgia, serif";
   ctx.fillStyle = "#E8D5A3";
-  ctx.fillText("WEDDING TICKET", W / 2, 150);
+  ctx.fillText("WEDDING TICKET", W/2, 150);
   ctx.font = "italic 22px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillStyle = "rgba(232,213,163,0.7)";
-  ctx.fillText(COUPLE.hashtag, W / 2, 190);
+  ctx.fillStyle = "rgba(232,213,163,0.75)";
+  ctx.fillText(COUPLE.hashtag, W/2, 195);
 
-  ctx.fillStyle = "#3D2B1F";
-  ctx.font = "italic 28px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText(rsvp.name, W / 2, 290);
-
-  ctx.font = "600 80px 'Cormorant Garamond', Georgia, serif";
+  // === COUPLE NAMES ===
   ctx.fillStyle = "#1A1209";
-  ctx.fillText(`${COUPLE.groom}`, W / 2, 400);
+  ctx.font = "600 64px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText(COUPLE.groom, W/2, 350);
   ctx.fillStyle = "#C4847A";
-  ctx.font = "italic 50px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText("&", W / 2, 470);
+  ctx.font = "italic 44px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText("&", W/2, 410);
   ctx.fillStyle = "#1A1209";
-  ctx.font = "600 70px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText(`${COUPLE.bride}`, W / 2, 560);
+  ctx.font = "600 56px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText(COUPLE.bride, W/2, 480);
 
-  ctx.strokeStyle = "rgba(201,169,110,0.3)";
-  ctx.beginPath();
-  for (let i = 0; i < W; i += 12) {
-    ctx.moveTo(i, 640); ctx.lineTo(i + 6, 640);
+  // dotted divider
+  ctx.fillStyle = "rgba(201,169,110,0.5)";
+  for (let x = 100; x < W - 100; x += 14) ctx.fillRect(x, 525, 6, 2);
+
+  // === GUEST WELCOME + RELATIONSHIP BADGE ===
+  ctx.fillStyle = "#3D2B1F";
+  ctx.font = "italic 26px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText(`Welcome, ${rsvp.name}`, W/2, 580);
+
+  if (rsvp.relationship) {
+    let label = relationshipLabel(rsvp.relationship);
+    label = label.replace(/[^\x00-\x7F]/g, "").trim().replace(/\s+/g, " ").toUpperCase();
+    ctx.font = "600 16px 'Cinzel', Georgia, serif";
+    const tw = ctx.measureText(label).width;
+    const bw = tw + 40, bx = (W - bw)/2, by = 600, bh = 32;
+    // pill background
+    ctx.fillStyle = "#C9A96E";
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, bh/2);
+      ctx.fill();
+    } else {
+      ctx.fillRect(bx, by, bw, bh);
+    }
+    ctx.fillStyle = "white";
+    ctx.fillText(label, W/2, by + 22);
   }
-  ctx.stroke();
 
-  ctx.fillStyle = "#C9A96E";
-  ctx.font = "600 22px 'Cinzel', Georgia, serif";
+  // === LEFT COLUMN: EVENTS ===
+  let y = 720;
+  // Holy Mass
   ctx.textAlign = "left";
-  ctx.fillText("DATE", 100, 720);
-  ctx.fillStyle = "#1A1209";
-  ctx.font = "32px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText("21 June 2026", 100, 760);
-
   ctx.fillStyle = "#C9A96E";
-  ctx.font = "600 22px 'Cinzel', Georgia, serif";
-  ctx.fillText("VENUE", 100, 830);
+  ctx.font = "600 18px 'Cinzel', Georgia, serif";
+  ctx.fillText("⛪  HOLY NUPTIAL MASS", 80, y);
+  y += 38;
   ctx.fillStyle = "#1A1209";
-  ctx.font = "28px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText(COUPLE.venue, 100, 870);
-  ctx.font = "italic 22px 'Cormorant Garamond', Georgia, serif";
+  ctx.font = "italic 26px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText("Sunday · 21 June 2026 · 9:30 AM", 80, y);
+  y += 36;
+  ctx.font = "22px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillStyle = "#3D2B1F";
+  ctx.fillText("Our Lady of Presentation Church", 80, y);
+  y += 28;
+  ctx.font = "italic 18px 'Cormorant Garamond', Georgia, serif";
   ctx.fillStyle = "#6B5040";
-  ctx.fillText("Chennai, India", 100, 905);
+  ctx.fillText("Neyveli Township, Tamil Nadu", 80, y);
 
+  // Reception
+  y += 60;
   ctx.fillStyle = "#C9A96E";
-  ctx.font = "600 22px 'Cinzel', Georgia, serif";
-  ctx.fillText("GUESTS", 100, 980);
+  ctx.font = "600 18px 'Cinzel', Georgia, serif";
+  ctx.fillText("🎊  WEDDING RECEPTION", 80, y);
+  y += 38;
   ctx.fillStyle = "#1A1209";
-  ctx.font = "32px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText(`${rsvp.guests} ${rsvp.guests === 1 ? "Guest" : "Guests"}`, 100, 1020);
+  ctx.font = "italic 26px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText("Sunday · 12:00 PM – 2:00 PM", 80, y);
+  y += 36;
+  ctx.font = "22px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillStyle = "#3D2B1F";
+  ctx.fillText("Thirumana Mandapam", 80, y);
+  y += 28;
+  ctx.font = "italic 18px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillStyle = "#6B5040";
+  ctx.fillText("Community Hall, Block 24, Neyveli", 80, y);
 
-  ctx.fillStyle = "#C9A96E";
-  ctx.font = "600 22px 'Cinzel', Georgia, serif";
-  ctx.fillText("EVENTS", 100, 1090);
-  ctx.fillStyle = "#1A1209";
-  ctx.font = "italic 22px 'Cormorant Garamond', Georgia, serif";
-  const eventNames = rsvp.events.map(eId => RSVP_EVENTS.find(e => e.id === eId)?.label).filter(Boolean).join(" · ");
-  ctx.fillText(eventNames || "—", 100, 1125);
-
-  // QR-like grid
-  ctx.fillStyle = "#1A1209";
-  const gridX = 720, gridY = 700, cell = 8;
-  ctx.fillRect(gridX - 12, gridY - 12, 24 + 18 * cell, 24 + 18 * cell);
-  ctx.fillStyle = "#FDF8F0";
-  ctx.fillRect(gridX - 8, gridY - 8, 16 + 18 * cell, 16 + 18 * cell);
-  ctx.fillStyle = "#1A1209";
-  for (let r = 0; r < 18; r++) {
-    for (let c = 0; c < 18; c++) {
+  // === RIGHT: REAL QR ===
+  const qrSize = 280, qrX = W - qrSize - 80, qrY = 720;
+  // White card behind
+  ctx.fillStyle = "white";
+  ctx.fillRect(qrX - 16, qrY - 16, qrSize + 32, qrSize + 64);
+  ctx.strokeStyle = "#C9A96E";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(qrX - 16, qrY - 16, qrSize + 32, qrSize + 64);
+  if (qrImg) {
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+  } else {
+    // Fallback: decorative grid
+    ctx.fillStyle = "#1A1209";
+    const cell = qrSize / 18;
+    for (let r = 0; r < 18; r++) for (let c = 0; c < 18; c++) {
+      const corner = (r < 3 && c < 3) || (r < 3 && c > 14) || (r > 14 && c < 3);
       const seed = (r * 31 + c * 17 + rsvp.reservationCode.charCodeAt((r + c) % rsvp.reservationCode.length)) % 100;
-      const corner = (r < 4 && c < 4) || (r < 4 && c > 13) || (r > 13 && c < 4);
-      if (corner || seed < 50) {
-        ctx.fillRect(gridX + c * cell, gridY + r * cell, cell - 1, cell - 1);
-      }
+      if (corner || seed < 50) ctx.fillRect(qrX + c * cell, qrY + r * cell, cell - 1, cell - 1);
     }
   }
-
-  ctx.fillStyle = "#C9A96E";
-  ctx.font = "600 22px 'Cinzel', Georgia, serif";
+  ctx.fillStyle = "#8B6914";
+  ctx.font = "600 14px 'Cinzel', Georgia, serif";
   ctx.textAlign = "center";
-  ctx.fillText("RESERVATION CODE", W / 2, 1280);
+  ctx.fillText("SCAN FOR DETAILS", qrX + qrSize/2, qrY + qrSize + 30);
+
+  // === STATS ROW ===
+  y = 1080;
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#C9A96E";
+  ctx.font = "600 18px 'Cinzel', Georgia, serif";
+  ctx.fillText("GUESTS", 80, y);
   ctx.fillStyle = "#1A1209";
-  ctx.font = "600 56px 'Cinzel', Georgia, monospace";
-  ctx.fillText(rsvp.reservationCode, W / 2, 1340);
+  ctx.font = "26px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText(`${rsvp.guests} ${rsvp.guests === 1 ? "Guest" : "Guests"}`, 220, y);
 
-  ctx.fillStyle = "rgba(0,0,0,0.4)";
-  ctx.font = "italic 18px 'Cormorant Garamond', Georgia, serif";
-  ctx.fillText("Please present this ticket at the entrance", W / 2, 1430);
+  // === BADGES (travel) ===
+  let bx = 480;
+  const drawBadge = (text, color) => {
+    ctx.font = "600 14px 'Cinzel', Georgia, serif";
+    const tw = ctx.measureText(text).width;
+    const w = tw + 28;
+    ctx.fillStyle = color;
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(bx, y - 20, w, 28, 14);
+      ctx.fill();
+    } else {
+      ctx.fillRect(bx, y - 20, w, 28);
+    }
+    ctx.fillStyle = "white";
+    ctx.fillText(text, bx + 14, y);
+    bx += w + 12;
+  };
+  if (rsvp.needsHotel) drawBadge("🏨 HOTEL", "#9B8EC4");
+  if (rsvp.needsShuttle) drawBadge("🚐 SHUTTLE", "#6EA8C9");
 
-  canvas.toBlob((blob) => {
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `wedding-ticket-${rsvp.reservationCode}.png`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, "image/png", 0.95);
+  // === SONG REQUEST ===
+  if (rsvp.songRequest) {
+    y += 50;
+    ctx.fillStyle = "#C9A96E";
+    ctx.font = "600 14px 'Cinzel', Georgia, serif";
+    ctx.fillText("♪  SONG REQUEST", 80, y);
+    y += 26;
+    ctx.fillStyle = "#3D2B1F";
+    ctx.font = "italic 20px 'Cormorant Garamond', Georgia, serif";
+    const songText = `"${rsvp.songRequest.length > 60 ? rsvp.songRequest.slice(0, 60) + "…" : rsvp.songRequest}"`;
+    ctx.fillText(songText, 80, y);
+  }
+
+  // === COUNTDOWN ===
+  ctx.fillStyle = "#C4847A";
+  ctx.font = "italic 24px 'Cormorant Garamond', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.fillText(`💌  ${countdownText}`, W/2, 1240);
+
+  // === TEAR LINE ===
+  ctx.strokeStyle = "rgba(139,105,20,0.5)";
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  ctx.moveTo(40, 1290);
+  ctx.lineTo(W - 40, 1290);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // scissors hint
+  ctx.fillStyle = "#8B6914";
+  ctx.font = "20px serif";
+  ctx.textAlign = "left";
+  ctx.fillText("✁", 12, 1296);
+
+  // === RESERVATION CODE STUB ===
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#C9A96E";
+  ctx.font = "600 18px 'Cinzel', Georgia, serif";
+  ctx.fillText("RESERVATION CODE", W/2, 1340);
+  ctx.fillStyle = "#1A1209";
+  ctx.font = "600 60px 'Courier New', monospace";
+  ctx.fillText(rsvp.reservationCode, W/2, 1410);
+
+  // Contact for queries
+  ctx.fillStyle = "#6B5040";
+  ctx.font = "italic 17px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText("Queries · Maria Lisbel  +91 70195 79609", W/2, 1455);
+
+  // === BIBLE VERSE + THANK YOU ===
+  ctx.fillStyle = "rgba(0,0,0,0.55)";
+  ctx.font = "italic 22px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText('"He hath made everything beautiful in its time"', W/2, 1520);
+  ctx.fillStyle = "rgba(201,169,110,0.85)";
+  ctx.font = "600 13px 'Cinzel', Georgia, serif";
+  ctx.fillText("ECCLESIASTES 3:11", W/2, 1545);
+
+  ctx.fillStyle = "#C4847A";
+  ctx.font = "italic 22px 'Cormorant Garamond', Georgia, serif";
+  ctx.fillText("From our hearts to yours ✦", W/2, 1600);
+  ctx.fillStyle = "#8B6914";
+  ctx.font = "600 14px 'Cinzel', Georgia, serif";
+  ctx.fillText("ANTONY  &  MARIA", W/2, 1630);
+
+  // === DECORATIVE GOLD CORNERS ===
+  const drawCorner = (cx, cy, fx, fy) => {
+    ctx.strokeStyle = "#C9A96E";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(cx + fx*60, cy);
+    ctx.lineTo(cx, cy);
+    ctx.lineTo(cx, cy + fy*60);
+    ctx.stroke();
+    // inner accent
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx + fx*45, cy + fy*8);
+    ctx.lineTo(cx + fx*8, cy + fy*8);
+    ctx.lineTo(cx + fx*8, cy + fy*45);
+    ctx.stroke();
+    // ornament dot
+    ctx.fillStyle = "#C9A96E";
+    ctx.beginPath();
+    ctx.arc(cx + fx*16, cy + fy*16, 3, 0, Math.PI*2);
+    ctx.fill();
+  };
+  drawCorner(20, 260, 1, 1);     // top-left (below dark band)
+  drawCorner(W - 20, 260, -1, 1); // top-right
+  drawCorner(20, H - 20, 1, -1);   // bottom-left
+  drawCorner(W - 20, H - 20, -1, -1); // bottom-right
+
+  // === SAVE ===
+  await new Promise(resolve => {
+    canvas.toBlob((blob) => {
+      if (!blob) { resolve(); return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `wedding-ticket-${rsvp.reservationCode}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+      resolve();
+    }, "image/png", 0.95);
+  });
 }
 
 function CardChoice({ active, onClick, icon, title, sub, color = "#C9A96E" }) {
