@@ -238,11 +238,13 @@ function SaveTheDateButton({ couple }) {
 
     ctx.fillStyle = "#C9A96E";
     ctx.font = "600 56px 'Cinzel', Georgia, serif";
-    ctx.fillText("21 JUNE 2026", W / 2, 880);
+    ctx.fillText("SUN · 21 JUNE 2026 · 9:30 AM", W / 2, 880);
 
     ctx.fillStyle = "rgba(232,213,163,0.7)";
-    ctx.font = "italic 28px 'Cormorant Garamond', Georgia, serif";
-    ctx.fillText("Chennai, India", W / 2, 940);
+    ctx.font = "italic 26px 'Cormorant Garamond', Georgia, serif";
+    ctx.fillText("Our Lady of Presentation Church", W / 2, 940);
+    ctx.font = "italic 22px 'Cormorant Garamond', Georgia, serif";
+    ctx.fillText("Neyveli Township, Tamil Nadu", W / 2, 975);
 
     ctx.fillStyle = "rgba(232,213,163,0.5)";
     ctx.font = "italic 24px 'Cormorant Garamond', Georgia, serif";
@@ -1662,15 +1664,45 @@ function FAQItem({ q, a }) {
 const COUPLE = {
   groom: "Antony Paul",
   bride: "Maria Loraine Lydia",
-  date: "2026-06-21T16:00:00",
+  groomFull: "Mr. S.A. Antony Paul, B.Tech",
+  groomBio: "Senior Associate, Cyber Security & AI, Cognizant (CTS), Chennai",
+  brideFull: "Dr. Maria Loraine Lydia, MBBS, MS (Ophthalmology)",
+  brideBio: "Senior Resident, Justice K.S. Hegde Charitable Hospital, Mangaluru",
+  date: "2026-06-21T09:30:00",
   dateLabel: "21 June · 2026",
-  venue: "St. Michael's Cathedral",
-  venueAddress: "St. Michael's Cathedral, Chennai, Tamil Nadu, India",
-  city: "Chennai, India",
+  dayLabel: "Sunday",
+  ceremonyTime: "9:30 AM",
+  receptionTime: "12:00 PM – 2:00 PM",
+  venue: "Our Lady of Presentation Church",
+  venueAddress: "Our Lady of Presentation Church, Neyveli Township, Neyveli, Tamil Nadu, India",
+  city: "Neyveli, Tamil Nadu",
   hashtag: "#AntonyMariaForever",
   initials: "A ✦ M",
   rsvpDeadline: "May 21, 2026",
-  receptionVenue: "Grand Ballroom, Taj Coromandel",
+  receptionVenue: "Thirumana Mandapam, Neyveli Township, Block 24",
+  receptionAddress: "Thirumana Mandapam, Block 24, Neyveli Township, Neyveli, Tamil Nadu",
+  brideParents: { father: "Mr. B. Arokianathan David", mother: "Mrs. A. Anna Shantha Mary" },
+  groomParents: { father: "Mr. S. Arokyadoss", mother: "Mrs. G. Savariamma" },
+  contacts: [
+    { name: "Mr. David (Bride's Father)",  phone: "+91 94484 54842" },
+    { name: "Mrs. Anna Shantha (Bride's Mother)", phone: "+91 63602 32488" },
+    { name: "Ms. Maria Lisbel (Bride's Sister)",  phone: "+91 70195 79609" },
+  ],
+  priests: [
+    "Rev. Fr. Albert Thambidurai",
+    "Rev. Fr. John Kumar S.J",
+    "Rev. Fr. P. Simon Antonyraj",
+    "Rev. Fr. Lourdusamy SDB",
+    "Rev. Fr. Arul Dass",
+    "Rev. Fr. Lourdusamy Samy OSM",
+  ],
+  brideSiblings: [
+    { name: "Ms. A. Maria Lisbel", role: "Sister of the Bride", bio: "BBM, MBA, IRS · Senior Business Analyst, Bangalore" },
+  ],
+  groomSiblings: [
+    { name: "Mrs. S.A. Jenifer", role: "Sister of the Groom", bio: "B.Com, MBA · Senior Tax Analyst, USA · with husband Mr. T. Philip Pridheevraj (Engineering Manager, ARI, USA) and Master Michael Etrian" },
+    { name: "Mrs. A. Antony Ruby Alexia", role: "Sister of the Groom", bio: "B.Com, MBA · Software Engineer, Dubai · with husband Mr. J. Inspen Christo (Engineer, AES, Dubai)" },
+  ],
 };
 
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(COUPLE.venueAddress)}`;
@@ -1728,13 +1760,13 @@ function HomePage({ setPage }) {
           {COUPLE.bride}
         </h1>
         <div className="hero-divider" />
-        <p className="hero-date">{COUPLE.dateLabel} · Chennai</p>
+        <p className="hero-date">{COUPLE.dayLabel} · {COUPLE.dateLabel} · Neyveli</p>
         <p style={{ fontFamily: "'Cinzel', serif", fontSize: 13, letterSpacing: 3, color: "var(--rose)", marginTop: -8, marginBottom: 16, animation: "fadeInUp 1s 0.85s both" }}>
           {COUPLE.hashtag}
         </p>
         <p className="hero-verse">
-          "Two are better than one, because they have a good return for their labor."
-          <span style={{ display: "block", marginTop: 6, fontSize: 14, color: "rgba(201,169,110,0.6)", fontStyle: "normal", fontFamily: "'Cinzel', serif", letterSpacing: 1 }}>Ecclesiastes 4:9</span>
+          "He hath made everything beautiful in its time."
+          <span style={{ display: "block", marginTop: 6, fontSize: 14, color: "rgba(201,169,110,0.6)", fontStyle: "normal", fontFamily: "'Cinzel', serif", letterSpacing: 1 }}>Ecclesiastes 3:11</span>
         </p>
 
         <div style={{ marginTop: 48, display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
@@ -1762,9 +1794,9 @@ function HomePage({ setPage }) {
           <div className="gold-divider" />
           <div className="grid-3">
             {[
-              { icon: "⛪", title: "Ceremony", sub: "St. Michael's Cathedral", time: "4:00 PM" },
-              { icon: "🎊", title: "Reception", sub: "Grand Ballroom, Taj Hotel", time: "7:00 PM" },
-              { icon: "🙏", title: "Blessing", sub: "Garden Chapel", time: "3:00 PM" },
+              { icon: "⛪", title: "Holy Mass", sub: "Our Lady of Presentation Church, Neyveli Township", time: "9:30 AM" },
+              { icon: "🎊", title: "Reception", sub: "Thirumana Mandapam, Block 24, Neyveli", time: "12:00 PM – 2:00 PM" },
+              { icon: "🙏", title: "Blessing", sub: "Solemnized by 6 priests", time: "Sunday, 21 June 2026" },
             ].map((c) => (
               <div key={c.title} className="card-light" style={{ textAlign: "center", animationDelay: "0.1s" }}>
                 <div style={{ fontSize: 40, marginBottom: 16 }}>{c.icon}</div>
@@ -1891,27 +1923,19 @@ function StoryPage() {
 function EventsPage() {
   const events = [
     {
-      cls: "event-card-1",
-      emoji: "🙏", title: "Prayer & Blessing Ceremony",
-      date: "June 20, 2026", time: "5:00 PM – 8:00 PM",
-      venue: "Family Home Chapel, Adyar",
-      desc: "An intimate gathering with family and close friends for blessings, prayer, and the traditional mehendi ceremony.",
-      color: "#64B5F6"
-    },
-    {
       cls: "event-card-2",
-      emoji: "⛪", title: "Wedding Ceremony",
-      date: "June 21, 2026", time: "4:00 PM – 6:00 PM",
-      venue: "St. Michael's Cathedral, T. Nagar",
-      desc: "A sacred Christian wedding ceremony celebrating the holy union of Antony Paul and Maria Loraine Lydia before God and loved ones.",
+      emoji: "⛪", title: "Holy Nuptial Mass",
+      date: "Sunday, June 21, 2026", time: "9:30 AM – 11:00 AM",
+      venue: "Our Lady of Presentation Church, Neyveli Township",
+      desc: "A sacred Catholic wedding ceremony solemnized by Rev. Fr. Albert Thambidurai with five concelebrating priests, celebrating the holy union of Antony Paul and Maria Loraine Lydia before God and loved ones.",
       color: "#EF9A9A"
     },
     {
       cls: "event-card-3",
       emoji: "🎊", title: "Wedding Reception",
-      date: "June 21, 2026", time: "7:00 PM – 11:00 PM",
-      venue: "Grand Ballroom, Taj Coromandel",
-      desc: "An elegant celebration with dinner, dancing, speeches, and a night to remember with the people we love.",
+      date: "Sunday, June 21, 2026", time: "12:00 PM – 2:00 PM",
+      venue: "Thirumana Mandapam, Block 24, Neyveli Township",
+      desc: "A joyful celebration luncheon with family and friends — a heartfelt welcome with food, music, and blessings to mark the beginning of our forever.",
       color: "#A5D6A7"
     },
   ];
@@ -2164,7 +2188,7 @@ function downloadTicket(rsvp) {
   ctx.fillStyle = "#C9A96E";
   ctx.font = "italic 28px 'Cormorant Garamond', Georgia, serif";
   ctx.textAlign = "center";
-  ctx.fillText("✦  ADMIT ONE  ✦", W / 2, 80);
+  ctx.fillText("❖  ADMIT ONE  ❖", W / 2, 80);
   ctx.font = "600 60px 'Cinzel', Georgia, serif";
   ctx.fillStyle = "#E8D5A3";
   ctx.fillText("WEDDING TICKET", W / 2, 150);
@@ -2813,12 +2837,41 @@ function MorePage({ setPage }) {
         <p className="section-sub">Additional information for our guests</p>
         <div className="gold-divider" />
         <div className="grid-2">
-          {/* QR CODE */}
-          <div className="card-light">
-            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 18, marginBottom: 16, color: "#3D2B1F" }}>📱 Quick Access QR</h3>
-            <div style={{ textAlign: "center" }}>
-              <QRCode value="https://antony-maria.wedding" size={140} />
-              <p style={{ marginTop: 12, fontSize: 13, color: "#8B6914", fontFamily: "Cinzel, serif", letterSpacing: 1 }}>Scan for wedding website</p>
+          {/* QR CODES — Scan to locate */}
+          <div className="card-light" style={{ gridColumn: "1 / -1" }}>
+            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>📍 Scan to Locate</h3>
+            <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", textAlign: "center", marginBottom: 24, fontSize: 16 }}>
+              Open your phone camera and scan for directions
+            </p>
+            <div className="grid-2" style={{ alignItems: "center" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ display: "inline-block", padding: 16, background: "white", borderRadius: 14, border: "2px solid rgba(201,169,110,0.25)", boxShadow: "0 8px 30px rgba(0,0,0,0.08)" }}>
+                  <img src={`${import.meta.env.BASE_URL}qr-church.png`}
+                    alt="QR code to Our Lady of Presentation Church"
+                    width={200} height={200}
+                    loading="lazy"
+                    style={{ display: "block", maxWidth: "100%", height: "auto" }} />
+                </div>
+                <p style={{ marginTop: 14, fontFamily: "Cinzel, serif", fontSize: 13, letterSpacing: 2, color: "#3D2B1F" }}>⛪ WEDDING CEREMONY</p>
+                <p style={{ marginTop: 4, fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14 }}>
+                  Our Lady of Presentation Church
+                </p>
+                <p style={{ fontSize: 12, color: "#8B6914", marginTop: 2 }}>Sunday · 9:30 AM</p>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ display: "inline-block", padding: 16, background: "white", borderRadius: 14, border: "2px solid rgba(201,169,110,0.25)", boxShadow: "0 8px 30px rgba(0,0,0,0.08)" }}>
+                  <img src={`${import.meta.env.BASE_URL}qr-reception.png`}
+                    alt="QR code to Reception Hall"
+                    width={200} height={200}
+                    loading="lazy"
+                    style={{ display: "block", maxWidth: "100%", height: "auto" }} />
+                </div>
+                <p style={{ marginTop: 14, fontFamily: "Cinzel, serif", fontSize: 13, letterSpacing: 2, color: "#3D2B1F" }}>🎊 RECEPTION</p>
+                <p style={{ marginTop: 4, fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14 }}>
+                  Thirumana Mandapam, Block 24
+                </p>
+                <p style={{ fontSize: 12, color: "#8B6914", marginTop: 2 }}>Sunday · 12:00 PM – 2:00 PM</p>
+              </div>
             </div>
           </div>
 
@@ -2905,23 +2958,99 @@ function MorePage({ setPage }) {
           </div>
         </div>
 
-        {/* WEDDING PARTY */}
+        {/* OUR FAMILIES */}
         <div style={{ marginTop: 40 }}>
-          <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 24, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>The Wedding Party</h3>
-          <p className="section-sub" style={{ marginBottom: 32 }}>The dear ones standing with us</p>
-          <div className="grid-4">
-            {[
-              { role: "Best Man", name: "Daniel Joseph", icon: "🤵" },
-              { role: "Maid of Honor", name: "Anitha Grace", icon: "👰" },
-              { role: "Groomsman", name: "Michael Raj", icon: "🤵" },
-              { role: "Bridesmaid", name: "Sarah Esther", icon: "👰" },
-            ].map(p => (
-              <div key={p.role} className="card-light" style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 38, marginBottom: 12 }}>{p.icon}</div>
-                <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 2, color: "#C9A96E", marginBottom: 6 }}>{p.role.toUpperCase()}</p>
-                <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 18, color: "#3D2B1F" }}>{p.name}</p>
+          <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 24, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>With the Blessings of Our Families</h3>
+          <p className="section-sub" style={{ marginBottom: 32 }}>The hearts that brought us together</p>
+          <div className="grid-2">
+            <div className="card-light" style={{ textAlign: "center", padding: 28 }}>
+              <div style={{ fontSize: 36, marginBottom: 12 }}>👰</div>
+              <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 3, color: "#C9A96E", marginBottom: 12 }}>BRIDE'S PARENTS</p>
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, color: "#3D2B1F", lineHeight: 1.4 }}>{COUPLE.brideParents.father}</p>
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14, marginTop: 4 }}>B.Sc, DBM, CAIIB</p>
+              <div style={{ margin: "16px 0", height: 1, background: "rgba(201,169,110,0.25)" }} />
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, color: "#3D2B1F", lineHeight: 1.4 }}>{COUPLE.brideParents.mother}</p>
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14, marginTop: 4 }}>M.A, Dip in Radiography, Dip in Counseling</p>
+            </div>
+            <div className="card-light" style={{ textAlign: "center", padding: 28 }}>
+              <div style={{ fontSize: 36, marginBottom: 12 }}>🤵</div>
+              <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 3, color: "#C9A96E", marginBottom: 12 }}>GROOM'S PARENTS</p>
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, color: "#3D2B1F", lineHeight: 1.4 }}>{COUPLE.groomParents.father}</p>
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14, marginTop: 4 }}>Rtd. Sr. Foreman, FM Yard, Mine I, NLC India Ltd</p>
+              <div style={{ margin: "16px 0", height: 1, background: "rgba(201,169,110,0.25)" }} />
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, color: "#3D2B1F", lineHeight: 1.4 }}>{COUPLE.groomParents.mother}</p>
+              <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", fontSize: 14, marginTop: 4 }}>Block 24, Neyveli Township</p>
+            </div>
+          </div>
+        </div>
+
+        {/* SIBLINGS */}
+        <div style={{ marginTop: 40 }}>
+          <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>Beloved Siblings</h3>
+          <p className="section-sub" style={{ marginBottom: 24 }}>Standing with us in love and joy</p>
+          <div className="grid-2">
+            {[...COUPLE.brideSiblings, ...COUPLE.groomSiblings].map((s, i) => (
+              <div key={i} className="card-light">
+                <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 2, color: "#C9A96E", marginBottom: 6 }}>{s.role.toUpperCase()}</p>
+                <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 20, color: "#3D2B1F", marginBottom: 4 }}>{s.name}</p>
+                <p style={{ fontFamily: "Lato", fontSize: 13, color: "#6B5040", lineHeight: 1.6 }}>{s.bio}</p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* OFFICIATING CLERGY */}
+        <div style={{ marginTop: 40 }}>
+          <div className="card-light">
+            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>✝ Solemnized By</h3>
+            <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", textAlign: "center", marginBottom: 24, fontSize: 16 }}>
+              Our Lady of Presentation Church, Neyveli Township
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
+              {COUPLE.priests.map((p, i) => (
+                <div key={i} style={{
+                  padding: "12px 16px",
+                  background: "rgba(201,169,110,0.06)",
+                  border: "1px solid rgba(201,169,110,0.2)",
+                  borderRadius: 10,
+                  display: "flex", alignItems: "center", gap: 10,
+                }}>
+                  <span style={{ color: "#C9A96E", fontSize: 16 }}>✦</span>
+                  <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 15, color: "#3D2B1F" }}>{p}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* CONTACT FOR RSVP */}
+        <div style={{ marginTop: 40 }}>
+          <div className="card-light" style={{ background: "linear-gradient(135deg, rgba(201,169,110,0.08), rgba(196,132,122,0.06))" }}>
+            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>📞 Contact for Queries</h3>
+            <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", textAlign: "center", marginBottom: 24, fontSize: 16 }}>
+              Reach out to family for any questions
+            </p>
+            <div className="grid-3">
+              {COUPLE.contacts.map(c => (
+                <a key={c.phone} href={`tel:${c.phone.replace(/\s/g, "")}`}
+                  style={{
+                    textDecoration: "none",
+                    padding: 16,
+                    background: "white",
+                    border: "1px solid rgba(201,169,110,0.25)",
+                    borderRadius: 12,
+                    textAlign: "center",
+                    transition: "all 0.2s",
+                    display: "block",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(201,169,110,0.2)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
+                  <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 1.5, color: "#C9A96E", marginBottom: 8 }}>{c.name.toUpperCase()}</p>
+                  <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 18, color: "#3D2B1F", fontWeight: 600 }}>{c.phone}</p>
+                  <p style={{ fontSize: 11, color: "#8B6914", marginTop: 4, letterSpacing: 1 }}>TAP TO CALL</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -3243,7 +3372,7 @@ function WeddingShell() {
           {COUPLE.groom} <span style={{ color: "#C4847A" }}>&amp;</span> {COUPLE.bride}
         </p>
         <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 3, marginTop: 8 }}>
-          {COUPLE.dateLabel} · CHENNAI
+          {COUPLE.dayLabel.toUpperCase()} · {COUPLE.dateLabel} · NEYVELI
         </p>
         <p style={{ marginTop: 16, fontSize: 11, color: "rgba(201,169,110,0.5)" }}>
           {COUPLE.hashtag} · Made with ✦ for our wedding day
