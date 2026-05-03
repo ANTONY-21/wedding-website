@@ -1713,6 +1713,52 @@ const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURICom
 const SHARE_TEXT = `You're invited to the wedding of ${COUPLE.groom} & ${COUPLE.bride} on ${COUPLE.dateLabel.replace(" · ", " ")}! ${COUPLE.hashtag}`;
 const SITE_URL = typeof window !== "undefined" ? window.location.href : "https://antony-maria.wedding";
 
+// ─── BACK4APP / PARSE CONFIG ─────────────────────────────────────────────────
+// Public keys are safe to expose — class-level permissions only allow CREATE
+// on the RSVP class, so even if these are scraped no one can read/modify data.
+const PARSE_CONFIG = {
+  serverURL: "https://parseapi.back4app.com",
+  appId: "SHA3uto9OIaX0vaRVYL6NEiJkXRnqqPCgHrgCBMO",
+  jsKey: "WSPHsG2xtLWYWKizdb7O5N8Iyq0AUH0Itt5zMuqA",
+};
+
+async function sendRSVPToBackend(rsvp) {
+  const payload = {
+    name: rsvp.name || "",
+    email: rsvp.email || "",
+    phone: rsvp.phone || "",
+    countryCode: rsvp.countryCode || "",
+    relationship: rsvp.relationship || "",
+    attending: rsvp.attending || "",
+    events: rsvp.events || [],
+    guests: Number(rsvp.guests) || 1,
+    guestList: rsvp.guestList || [],
+    needsHotel: !!rsvp.needsHotel,
+    needsShuttle: !!rsvp.needsShuttle,
+    arrivalDate: rsvp.arrivalDate || "",
+    departureDate: rsvp.departureDate || "",
+    songRequest: rsvp.songRequest || "",
+    message: rsvp.message || "",
+    specialRequests: rsvp.specialRequests || "",
+    reservationCode: rsvp.reservationCode || "",
+    userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+  };
+  const res = await fetch(`${PARSE_CONFIG.serverURL}/classes/RSVP`, {
+    method: "POST",
+    headers: {
+      "X-Parse-Application-Id": PARSE_CONFIG.appId,
+      "X-Parse-JavaScript-Key": PARSE_CONFIG.jsKey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "");
+    throw new Error(`Backend ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  return res.json();
+}
+
 function downloadICS() {
   const dt = new Date(COUPLE.date);
   const pad = (n) => String(n).padStart(2, "0");
@@ -2425,12 +2471,17 @@ function RSVPPage() {
     try {
       const code = form.reservationCode || genReservationCode();
       const final = { ...form, reservationCode: code, ts: Date.now() };
-      // Production: POST to your endpoint
-      // await fetch(import.meta.env.VITE_RSVP_ENDPOINT, { method: "POST", body: JSON.stringify(final) });
-      await new Promise(r => setTimeout(r, 800));
-      setForm(final);
-      setSavedRSVP(final);
-      setAllRSVPs(prev => [...prev.filter(r => r.email !== final.email), final]);
+      let backendId = null;
+      try {
+        const res = await sendRSVPToBackend(final);
+        backendId = res?.objectId || null;
+      } catch (err) {
+        console.warn("Backend submission failed, saving locally only:", err);
+      }
+      const finalWithBackend = { ...final, backendId };
+      setForm(finalWithBackend);
+      setSavedRSVP(finalWithBackend);
+      setAllRSVPs(prev => [...prev.filter(r => r.email !== finalWithBackend.email), finalWithBackend]);
       setStep(5);
     } catch {
       setErrors({ submit: "Submission failed. Please try again." });
