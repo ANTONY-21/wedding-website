@@ -1989,25 +1989,21 @@ function EventsPage() {
   );
 }
 
-// Curated wedding-themed Unsplash photos (loaded with lazy attr)
+// Real wedding photos served from public/gallery/
 const GALLERY_PHOTOS = [
-  { id: "1519225421980-715cb0215aed", caption: "The First Dance", color: "#C9A96E" },
-  { id: "1606800052052-a08af7148866", caption: "Vows Exchanged", color: "#C4847A" },
-  { id: "1519741497674-611481863552", caption: "Sacred Union", color: "#7A9E7E" },
-  { id: "1465495976277-4387d4b0b4c6", caption: "Forever Begins", color: "#8B6914" },
-  { id: "1511285560929-80b456fea0bc", caption: "Hand in Hand", color: "#1E2D4E" },
-  { id: "1583939003579-730e3918a45a", caption: "Sealed with a Kiss", color: "#3D1A1A" },
-  { id: "1525772764200-be829a350797", caption: "Love's Embrace", color: "#E8D5A3" },
-  { id: "1532712938310-34cb3982ef74", caption: "Rings of Promise", color: "#6B5040" },
-  { id: "1519671482749-fd09be7ccebf", caption: "Garden Stroll", color: "#2D1F0E" },
-  { id: "1583939411023-14783179e581", caption: "Joyful Moment", color: "#D4B97A" },
-  { id: "1502635385003-ee1e6a1a742d", caption: "Candlelit Promise", color: "#F5E6C8" },
-  { id: "1591604466107-ec97de577aff", caption: "Together Always", color: "#C9A96E" },
+  { file: "01-groom.jpg",   caption: "The Groom",            color: "#C9A96E" },
+  { file: "02-bride.jpg",   caption: "The Bride",            color: "#C4847A" },
+  { file: "03-bouquet.jpg", caption: "Hand in Hand",         color: "#7A9E7E" },
+  { file: "04-joy.jpg",     caption: "Forever Smiles",       color: "#8B6914" },
+  { file: "05-stage.jpg",   caption: "Where We Said Yes",    color: "#1E2D4E" },
+  { file: "06-cake.jpg",    caption: "Sweet Beginnings",     color: "#3D1A1A" },
+  { file: "07-cutting.jpg", caption: "First Cut, First Sweet", color: "#E8D5A3" },
+  { file: "08-feast.jpg",   caption: "A Feast for Loved Ones", color: "#6B5040" },
 ];
 
 function GalleryImage({ photo, idx, onSelect }) {
   const [loaded, setLoaded] = useState(false);
-  const src = `https://images.unsplash.com/photo-${photo.id}?w=600&q=75&auto=format&fit=crop`;
+  const src = `${import.meta.env.BASE_URL}gallery/${photo.file}`;
   return (
     <button
       type="button"
@@ -2068,7 +2064,7 @@ function GalleryPage() {
         <div className="gold-divider" />
         <div className="gallery-grid" role="list">
           {GALLERY_PHOTOS.map((p, i) => (
-            <div key={p.id} role="listitem">
+            <div key={p.file} role="listitem">
               <GalleryImage photo={p} idx={i} onSelect={setSelected} />
             </div>
           ))}
@@ -2095,7 +2091,7 @@ function GalleryPage() {
               width: 40, height: 40, borderRadius: "50%", fontSize: 18, cursor: "pointer", zIndex: 10 }}>✕</button>
 
           <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 900, width: "100%", textAlign: "center" }}>
-            <img src={`https://images.unsplash.com/photo-${GALLERY_PHOTOS[selected].id}?w=1400&q=85&auto=format&fit=crop`}
+            <img src={`${import.meta.env.BASE_URL}gallery/${GALLERY_PHOTOS[selected].file}`}
               alt={GALLERY_PHOTOS[selected].caption}
               style={{ maxWidth: "100%", maxHeight: "75vh", borderRadius: 16, boxShadow: "0 40px 100px rgba(0,0,0,0.5)", border: "2px solid rgba(201,169,110,0.4)", animation: "scaleIn 0.4s ease" }} />
             <p style={{ marginTop: 20, fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#E8D5A3", fontSize: 20, letterSpacing: 1 }}>
