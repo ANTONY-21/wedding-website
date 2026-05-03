@@ -1810,12 +1810,20 @@ function HomePage({ setPage }) {
 
 function StoryPage() {
   const milestones = [
-    { year: "2019", icon: "☕", title: "First Meeting", desc: "A chance encounter at a Sunday church service. One smile changed everything." },
-    { year: "2020", icon: "📞", title: "First Call", desc: "Hours of conversation that stretched long past midnight, discovering shared faith and dreams." },
-    { year: "2021", icon: "✈️", title: "First Trip", desc: "Exploring the hills of Kodaikanal together — where friendship blossomed into love." },
-    { year: "2022", icon: "💒", title: "Deeper Commitment", desc: "Both dedicated their relationship to God. Praying together became a daily ritual." },
-    { year: "2023", icon: "💍", title: "The Proposal", desc: "Under the stars at Marina Beach. He got down on one knee and she said yes through tears of joy." },
-    { year: "2025", icon: "💒", title: "Wedding Day", desc: "Surrounded by family and friends, two hearts become one before God and loved ones." },
+    { year: "Dec 2025", icon: "🙏", title: "A Beginning Guided by Faith",
+      desc: "Through the love and guidance of our families, and with God's blessings, our journey began as an arranged match — one that already felt special from the very start." },
+    { year: "Dec 17, 2025", icon: "📞", title: "First Conversation",
+      desc: "A missed call, a busy day — and then, a conversation that lasted for hours. In that moment, we found comfort, laughter, and a connection that felt effortless and real." },
+    { year: "Late Dec 2025", icon: "💞", title: "Love Takes Shape",
+      desc: "With every call, we grew closer. He admired her warmth and joyful spirit, while she found peace in his kindness and care. What began as a conversation slowly turned into something beautiful — love." },
+    { year: "Dec 30, 2025", icon: "👫", title: "First Meeting",
+      desc: "Seeing each other for the first time felt natural and familiar, as if our hearts had already known each other." },
+    { year: "Early 2026", icon: "🤝", title: "Families & Blessings",
+      desc: "With happiness on both sides, our families came together, and everything fell into place so smoothly — just as it was meant to be." },
+    { year: "Apr 26, 2026", icon: "💍", title: "Engagement",
+      desc: "A promise made with love, marking the beginning of our forever." },
+    { year: "Jun 21, 2026", icon: "💒", title: "Wedding Day",
+      desc: "With God's grace and our families beside us, we begin our new journey — together as one." },
   ];
   return (
     <div style={{ background: "#FAF3E4", minHeight: "100vh" }}>
@@ -1823,6 +1831,25 @@ function StoryPage() {
         <h2 className="section-title">Our Love Story</h2>
         <p className="section-sub">Written by God, authored in love</p>
         <div className="gold-divider" />
+
+        {/* Opening quote */}
+        <div style={{ maxWidth: 720, margin: "0 auto 56px", textAlign: "center" }}>
+          <p style={{
+            fontFamily: "Cormorant Garamond, serif", fontStyle: "italic",
+            fontSize: "clamp(20px, 3.5vw, 28px)", color: "#3D2B1F", lineHeight: 1.5,
+            position: "relative", padding: "0 24px",
+          }}>
+            <span style={{ color: "#C9A96E", fontSize: 48, position: "absolute", left: -8, top: -16, lineHeight: 1, fontFamily: "Georgia, serif" }}>&ldquo;</span>
+            When it's meant to be, everything falls into place with love, faith, and blessings.
+            <span style={{ color: "#C9A96E", fontSize: 48, position: "absolute", right: -8, bottom: -32, lineHeight: 1, fontFamily: "Georgia, serif" }}>&rdquo;</span>
+          </p>
+          <div style={{ marginTop: 24, display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+            <span style={{ width: 40, height: 1, background: "#C9A96E" }} />
+            <span style={{ color: "#C9A96E" }}>✦</span>
+            <span style={{ width: 40, height: 1, background: "#C9A96E" }} />
+          </div>
+        </div>
+
         <div className="timeline">
           {milestones.map((m, i) => (
             <div key={m.year} className="timeline-item" style={{ animationDelay: `${i * 0.15}s` }}>
@@ -2870,10 +2897,10 @@ function MorePage({ setPage }) {
         <div style={{ marginTop: 40 }}>
           <div className="card-light" style={{ textAlign: "center" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>💍</div>
-            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", marginBottom: 16 }}>The Proposal</h3>
+            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", marginBottom: 16 }}>The Engagement</h3>
             <div className="scripture">
-              It was a quiet evening at Marina Beach. The sun had just dipped below the horizon, painting the sky in hues of amber and rose. Antony had planned everything for months — the spot, the words, the ring. As the stars emerged one by one, he got down on one knee and asked Maria to be his partner in faith, love, and life forever. Through tears of joy, she whispered "Yes."
-              <span className="scripture-ref">December 24, 2024 · Chennai</span>
+              Surrounded by the love of our families and the blessings of God, we exchanged rings — a promise made with love, marking the beginning of our forever. What began as an arranged match through our families had blossomed into something beautiful, and on this day we said yes to a lifetime together.
+              <span className="scripture-ref">April 26, 2026 · Chennai</span>
             </div>
           </div>
         </div>
