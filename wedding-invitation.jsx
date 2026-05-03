@@ -2852,7 +2852,8 @@ function ReviewRow({ label, value, onEdit }) {
 }
 
 function MorePage({ setPage }) {
-  const [guestMessages, setGuestMessages] = usePersistedState("am_guestbook", [
+  const [guestMessages, setGuestMessages] = usePersistedState("am_guestbook_v2", [
+    { name: "Dr. Maria Loraine Lydia & Antony Paul", msg: "Dearest family and friends — thank you for being a part of our journey. Your love, prayers, and blessings mean everything to us as we begin this new chapter together. ✦", ts: Date.now(), pinned: true },
     { name: "Sarah & Tom", msg: "Wishing you a lifetime of joy and love! 🙏", ts: Date.now() - 86400000 * 7 },
     { name: "The Mathews Family", msg: "God's richest blessings on your marriage!", ts: Date.now() - 86400000 * 3 },
   ]);
@@ -2923,37 +2924,6 @@ function MorePage({ setPage }) {
             </div>
           </div>
 
-          {/* TRAVEL */}
-          <div className="card-light">
-            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 18, marginBottom: 16, color: "#3D2B1F" }}>✈️ Travel & Stay</h3>
-            {[
-              { icon: "🏨", title: "Taj Coromandel", sub: "Partner hotel · ₹8,500/night · 0.2km" },
-              { icon: "🚗", title: "Shuttle Service", sub: "Free shuttle from hotel every 30 mins" },
-              { icon: "✈️", title: "Nearest Airport", sub: "Chennai International · 12km away" },
-            ].map(t => (
-              <div key={t.title} style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-                <span style={{ fontSize: 24 }}>{t.icon}</span>
-                <div>
-                  <p style={{ fontFamily: "Cinzel, serif", fontSize: 13, color: "#3D2B1F" }}>{t.title}</p>
-                  <p style={{ fontSize: 12, color: "#8B6914" }}>{t.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* REGISTRY */}
-          <div className="card-light">
-            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 18, marginBottom: 16, color: "#3D2B1F" }}>🎁 Registry</h3>
-            <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#6B5040", marginBottom: 20, lineHeight: 1.6 }}>
-              Your presence is our greatest gift. If you wish to honor us further, we are registered at:
-            </p>
-            {["Amazon Wedding Registry", "HomeCenter", "Honeymoon Fund"].map(r => (
-              <div key={r} style={{ padding: "10px 16px", background: "rgba(201,169,110,0.08)", borderRadius: 8, marginBottom: 8, fontFamily: "Cinzel, serif", fontSize: 13, color: "#8B6914", cursor: "pointer" }}>
-                {r} →
-              </div>
-            ))}
-          </div>
-
           {/* GUEST BOOK */}
           <div className="card-light">
             <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 18, marginBottom: 16, color: "#3D2B1F" }}>📖 Guest Book</h3>
@@ -2970,12 +2940,21 @@ function MorePage({ setPage }) {
             </p>
             <div style={{ maxHeight: 240, overflowY: "auto", paddingRight: 4 }}>
               {guestMessages.map((m, i) => (
-                <div key={m.ts || i} className="message-bubble">
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                    <p style={{ fontFamily: "Cinzel, serif", fontSize: 12, color: "#C9A96E" }}>{m.name}</p>
-                    {m.ts && <p style={{ fontSize: 10, color: "rgba(61,43,31,0.4)" }}>{new Date(m.ts).toLocaleDateString()}</p>}
+                <div key={m.ts || i} className="message-bubble" style={m.pinned ? {
+                  background: "linear-gradient(135deg, rgba(201,169,110,0.12), rgba(196,132,122,0.08))",
+                  border: "1px solid rgba(201,169,110,0.4)",
+                  borderRadius: "16px",
+                } : undefined}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <p style={{ fontFamily: "Cinzel, serif", fontSize: 12, color: m.pinned ? "#8B6914" : "#C9A96E", fontWeight: m.pinned ? 600 : 400 }}>
+                      {m.pinned && <span style={{ marginRight: 6 }}>✦</span>}
+                      {m.name}
+                    </p>
+                    {m.pinned ? (
+                      <span style={{ fontSize: 9, letterSpacing: 1.5, color: "#C4847A", fontFamily: "Cinzel, serif", padding: "2px 8px", background: "rgba(196,132,122,0.12)", borderRadius: 4 }}>FROM THE COUPLE</span>
+                    ) : m.ts && <p style={{ fontSize: 10, color: "rgba(61,43,31,0.4)" }}>{new Date(m.ts).toLocaleDateString()}</p>}
                   </div>
-                  <p style={{ fontFamily: "Lato", fontSize: 14, color: "#3D2B1F", lineHeight: 1.5 }}>{m.msg}</p>
+                  <p style={{ fontFamily: m.pinned ? "Cormorant Garamond, serif" : "Lato", fontStyle: m.pinned ? "italic" : "normal", fontSize: m.pinned ? 16 : 14, color: "#3D2B1F", lineHeight: 1.6 }}>{m.msg}</p>
                 </div>
               ))}
             </div>
@@ -3128,7 +3107,7 @@ function MorePage({ setPage }) {
               { q: "Are children welcome?", a: "We love your little ones! Children are welcome at the ceremony. There will be a quiet kids' corner at the reception with light entertainment." },
               { q: "Will the ceremony be live-streamed?", a: "Yes! For our family and friends who can't make it, we'll be streaming the ceremony live. The link will be shared via email closer to the date." },
               { q: "Can I bring a plus-one?", a: "Plus-ones are listed on your invitation. If you'd like to bring an additional guest, please reach out to us directly so we can accommodate." },
-              { q: "What's the gift policy?", a: "Your presence is the greatest gift. If you wish to bless us further, please see our Registry section above for ideas." },
+              { q: "What's the gift policy?", a: "Your presence and prayers are our greatest gift. There is no formal registry — your blessings on our new journey mean the world to us." },
             ].map((f, i) => <FAQItem key={i} q={f.q} a={f.a} />)}
           </div>
         </div>
