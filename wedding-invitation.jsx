@@ -1691,6 +1691,7 @@ const COUPLE = {
     { name: "Mr. David (Bride's Father)",  phone: "+91 94484 54842" },
     { name: "Mrs. Anna Shantha (Bride's Mother)", phone: "+91 63602 32488" },
     { name: "Ms. Maria Lisbel (Bride's Sister)",  phone: "+91 70195 79609" },
+    { name: "Mr. S. Arokyadoss (Groom's Father)", phone: "+91 94432 09122" },
   ],
   priests: [
     "Rev. Fr. Albert Thambidurai",
