@@ -1704,8 +1704,8 @@ const COUPLE = {
     { name: "Ms. A. Maria Lisbel", role: "Sister of the Bride", bio: "BBM, MBA, IRS · Senior Business Analyst, Bangalore" },
   ],
   groomSiblings: [
-    { name: "Mrs. S.A. Jenifer", role: "Sister of the Groom", bio: "B.Com, MBA · Senior Tax Analyst, USA · with husband Mr. T. Philip Pridheevraj (Engineering Manager, ARI, USA) and Master Michael Etrian" },
-    { name: "Mrs. A. Antony Ruby Alexia", role: "Sister of the Groom", bio: "B.Com, MBA · Software Engineer, Dubai · with husband Mr. J. Inspen Christo (Engineer, AES, Dubai)" },
+    { name: "Mrs. S.A. Jenifer", role: "Sister of the Groom", bio: "B.Com, MBA · Senior Tax Analyst, USA · with husband Mr. T. Phil Pridheevraj (Engineering Manager, ARI, USA) and Master Micheal Etrian" },
+    { name: "Mrs. A. Antony Ruby Alexia", role: "Sister of the Groom", bio: "B.Com, MBA · Software Engineer, Dubai · with husband Mr. J. Infant Christo (Engineer, AES, Dubai)" },
   ],
 };
 
@@ -3325,7 +3325,7 @@ function MorePage({ setPage }) {
             <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", marginBottom: 16 }}>The Engagement</h3>
             <div className="scripture">
               Surrounded by the love of our families and the blessings of God, we exchanged rings — a promise made with love, marking the beginning of our forever. What began as an arranged match through our families had blossomed into something beautiful, and on this day we said yes to a lifetime together.
-              <span className="scripture-ref">April 26, 2026 · Chennai</span>
+              <span className="scripture-ref">April 26, 2026 · Bangalore</span>
             </div>
           </div>
         </div>
