@@ -3396,37 +3396,6 @@ function MorePage({ setPage }) {
           </div>
         </div>
 
-        {/* CONTACT FOR RSVP */}
-        <div style={{ marginTop: 40 }}>
-          <div className="card-light" style={{ background: "linear-gradient(135deg, rgba(201,169,110,0.08), rgba(196,132,122,0.06))" }}>
-            <h3 style={{ fontFamily: "Cinzel, serif", fontSize: 22, color: "#3D2B1F", textAlign: "center", marginBottom: 8 }}>📞 Contact for Queries</h3>
-            <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", color: "#8B6914", textAlign: "center", marginBottom: 24, fontSize: 16 }}>
-              Reach out to family for any questions
-            </p>
-            <div className="grid-3">
-              {COUPLE.contacts.map(c => (
-                <a key={c.phone} href={`tel:${c.phone.replace(/\s/g, "")}`}
-                  style={{
-                    textDecoration: "none",
-                    padding: 16,
-                    background: "white",
-                    border: "1px solid rgba(201,169,110,0.25)",
-                    borderRadius: 12,
-                    textAlign: "center",
-                    transition: "all 0.2s",
-                    display: "block",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(201,169,110,0.2)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
-                  <p style={{ fontFamily: "Cinzel, serif", fontSize: 11, letterSpacing: 1.5, color: "#C9A96E", marginBottom: 8 }}>{c.name.toUpperCase()}</p>
-                  <p style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 18, color: "#3D2B1F", fontWeight: 600 }}>{c.phone}</p>
-                  <p style={{ fontSize: 11, color: "#8B6914", marginTop: 4, letterSpacing: 1 }}>TAP TO CALL</p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* DRESS CODE */}
         <div style={{ marginTop: 40 }}>
           <div className="card-light">
