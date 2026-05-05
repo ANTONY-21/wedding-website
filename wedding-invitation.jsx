@@ -2038,12 +2038,16 @@ function EventsPage() {
   );
 }
 
-// Wedding invitation card pages served from public/gallery/
+// Real wedding photos served from public/gallery/
 const GALLERY_PHOTOS = [
-  { file: "invitation-01.jpg", caption: "Wedding Invitation",       color: "#FDF8F0" },
-  { file: "invitation-02.jpg", caption: "Date & Names",             color: "#FAF3E4" },
-  { file: "invitation-03.jpg", caption: "Family Invitation",        color: "#F5E6C8" },
-  { file: "invitation-04.jpg", caption: "Relatives & Friends",      color: "#FAF3E4" },
+  { file: "01-groom.jpg",   caption: "The Groom",            color: "#C9A96E" },
+  { file: "02-bride.jpg",   caption: "The Bride",            color: "#C4847A" },
+  { file: "03-bouquet.jpg", caption: "Hand in Hand",         color: "#7A9E7E" },
+  { file: "04-joy.jpg",     caption: "Forever Smiles",       color: "#8B6914" },
+  { file: "05-stage.jpg",   caption: "Where We Said Yes",    color: "#1E2D4E" },
+  { file: "06-cake.jpg",    caption: "Sweet Beginnings",     color: "#3D1A1A" },
+  { file: "07-cutting.jpg", caption: "First Cut, First Sweet", color: "#E8D5A3" },
+  { file: "08-feast.jpg",   caption: "A Feast for Loved Ones", color: "#6B5040" },
 ];
 
 function GalleryImage({ photo, idx, onSelect }) {
@@ -2067,9 +2071,7 @@ function GalleryImage({ photo, idx, onSelect }) {
         style={{
           opacity: loaded ? 1 : 0,
           transition: "opacity 0.6s ease",
-          background: photo.color,
-          objectFit: "contain",
-          padding: 8,
+          background: `linear-gradient(135deg, ${photo.color}, ${photo.color}80)`,
         }}
       />
       <div className="gallery-overlay" aria-hidden="true">
