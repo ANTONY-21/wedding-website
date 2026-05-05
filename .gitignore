@@ -28,3 +28,7 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+
+# Video assembly intermediates
+video_build/
+wedding-invitation.mp4
